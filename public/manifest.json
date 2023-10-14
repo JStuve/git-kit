@@ -1,0 +1,32 @@
+{
+  "short_name": "GithubEx",
+  "name": "GithubEx - This is a Github browser extensions designed to provide a set of tools for OSS community.",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  },
+  "icons": {
+    "16": "logo192.png",
+    "48": "logo192.png",
+    "128": "logo192.png"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus"
+  ],
+  "content_scripts": [
+    {
+        "matches": ["http://*/*", "https://*/*"],
+        "js": [
+          "./static/js/content.js",
+          "./static/js/issueVisible.js"
+        ]
+    }
+  ],
+  "background": {
+    "service_worker": "./static/js/background.js",
+    "type": "module"
+  }
+}
