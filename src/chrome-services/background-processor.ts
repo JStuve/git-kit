@@ -1,16 +1,17 @@
+import { Message, MessageType } from "../models";
+
 export {};
 
-function main(): void {
-	chrome?.browserAction?.onClicked?.addListener(function (tab) {
-		// for the current tab, inject the "inject.js" file & execute it
-		chrome.tabs.executeScript(tab.id ?? 0, {
-			file: 'issueVisible.js'
-		});
+chrome.browserAction?.onClicked?.addListener(async function (tab) {
+	// for the current tab, inject the "inject.js" file & execute it
+	await chrome.tabs.executeScript(tab.id ?? 0, {
+		file: 'issueVisible.js'
 	});
-	
-}
 
-main();
+	chrome.runtime.sendMessage<Message<string>>({ type: MessageType.Standard, data: 'From background process'});
+
+});
+
 
 chrome.contextMenus.onClicked.addListener((value, tab) => {
 	console.log(value);

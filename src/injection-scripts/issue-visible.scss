@@ -1,0 +1,10 @@
+.visible-container {
+    align-items: center;
+    display: flex;
+    justify-self: center;
+
+    svg {
+        height: 20px;
+        width: 20px;
+    }
+}
