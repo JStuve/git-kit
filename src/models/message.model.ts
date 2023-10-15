@@ -1,6 +1,7 @@
 export enum MessageType {
     Standard = 'standard',
-    IssueHide = 'issue-hide'
+    IssueScriptLoad = 'issue-script-load',
+    IssueClicked = 'issue-clicked'
 }
 
 export interface Message<T> {

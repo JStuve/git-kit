@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.246"
+    "@types/chrome": "^0.0.246",
+    "mini-css-extract-plugin": "^2.7.6"
   }
 }

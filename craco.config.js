@@ -1,5 +1,16 @@
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 module.exports = {
     webpack: {
+        plugins: [new MiniCssExtractPlugin()],
+        module: {
+            rules: [
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, "css-loader"],
+            },
+            ],
+        },        
         configure: (webpackConfig, {env, paths}) => {
             return {
                 ...webpackConfig,
@@ -15,7 +26,7 @@ module.exports = {
                 },
                 optimization: {
                     ...webpackConfig.optimization,
-                    runtimeChunk: false,
+                    runtimeChunk: false
                 }
             }
         },

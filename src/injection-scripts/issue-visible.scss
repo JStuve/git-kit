@@ -1,10 +1,26 @@
-.visible-container {
-    align-items: center;
-    display: flex;
-    justify-self: center;
+div[id^="issue_"] {
 
-    svg {
-        height: 20px;
-        width: 20px;
+    &:hover {
+        .visible-container {
+            align-items: center;
+            display: flex;
+            justify-self: center;
+            margin: auto 0.25rem;
+            color: var(--color-scale-gray-4);
+
+            &:hover {
+                color: var(--color-scale-blue-4);
+                cursor: pointer;
+            }
+        
+            svg {
+                height: 20px;
+                width: 20px;
+            }
+        }
+    }
+
+    .visible-container {
+        display: none;
     }
 }
