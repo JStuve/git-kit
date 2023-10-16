@@ -16,4 +16,9 @@ export interface IndexDbDatabaseSchema extends DBSchema {
 export interface IndexDbIssueVisible {
     id: string;
     isVisible: boolean;
+    gitHub: {
+        author: string;
+        repo: string;
+    },
+    hiddenDate: Date
 }

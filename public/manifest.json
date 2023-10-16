@@ -21,7 +21,7 @@
     {
         "matches": ["http://*/*", "https://*/*"],
         "js": [
-          "./static/js/content.js",
+          "./static/js/githubDetails.js",
           "./static/js/issueVisible.js"
         ],
         "css": [

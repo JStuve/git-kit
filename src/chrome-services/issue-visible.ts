@@ -1,4 +1,4 @@
-import { IndexDbIssueVisible, IndexDbType, Message, MessageType } from '../models';
+import { IndexDbIssueVisible, IndexDbType, LocalStorageToken, Message, MessageType } from '../models';
 import './issue-visible.scss';
 import { IndexDB } from "../services/index-db.service";
 
@@ -12,7 +12,15 @@ chrome.runtime.onMessage.addListener(async (message: Message<unknown>) => {
 });
 
 async function loadIssueUI(): Promise<void> {
-	const existingIssuesHidden: IndexDbIssueVisible[] = await issueIndexDb.getAll();
+	const githubAuthor: string | null = await localStorage.getItem(LocalStorageToken.GitAuthor);
+	const githubRepo: string | null = await localStorage.getItem(LocalStorageToken.GitRepo);
+
+	if(githubAuthor === null || githubRepo === null) {
+		// TODO: Show some error message
+		return;
+	}
+
+	const existingIssuesHidden: IndexDbIssueVisible[] = await issueIndexDb.getAll(); // TODO: Update to only get records by author and repo 
 	const rawNodeElements = document.querySelectorAll('[id^="issue_"]');
 	const issueElements: HTMLDivElement[] = Array.from(rawNodeElements).filter(function(element) {
 		return element instanceof HTMLDivElement;
@@ -20,7 +28,7 @@ async function loadIssueUI(): Promise<void> {
 
 	for(const issueElement of issueElements) {
 		const issueId: string = issueElement.id.split('_')[1];
-		const isVisible: boolean = existingIssuesHidden?.find(i => i.id === issueId)?.isVisible === false ? false : true;
+		const isVisible: boolean = existingIssuesHidden?.find(i => i.id === getKey(githubAuthor, githubRepo, issueId))?.isVisible === false ? false : true;
 
 		const visibleContainerExists: boolean = !!issueElement.firstElementChild?.querySelector(`#${getVisibleElementId(issueId)}`);
 
@@ -44,18 +52,41 @@ function getVisibleElement(issueId: string): HTMLDivElement {
 
 		const issueElement = document.getElementById(`issue_${issueId}`);
 		if(issueElement) {
+
+			const githubAuthor: string | null = await localStorage.getItem(LocalStorageToken.GitAuthor);
+			const githubRepo: string | null = await localStorage.getItem(LocalStorageToken.GitRepo);
+
+			if(githubAuthor === null || githubRepo === null) {
+				// TODO: Show some error message
+				return;
+			}
+
 			issueElement.style.display = 'none';
+
+			const dbKey: string = getKey(githubAuthor, githubRepo, issueId)
 
 			chrome.runtime.sendMessage<Message<string>>({ 
 				type: MessageType.IssueHide, 
-				data: issueId
+				data: getKey(githubAuthor, githubRepo, issueId)
 			});
 
-			await issueIndexDb.update<IndexDbIssueVisible>(issueId, { id: issueId, isVisible: false});
+			await issueIndexDb.update<IndexDbIssueVisible>(dbKey, { 
+				id: dbKey, 
+				isVisible: false,
+				gitHub: {
+					author: githubAuthor,
+					repo: githubRepo
+				},
+				hiddenDate: new Date()
+			});
 		}
 	})
 
 	return visibleDiv;
+}
+
+function getKey(gitHubAuthor: string, githubRepo: string, issueId: string): string {
+	return `${gitHubAuthor}-${githubRepo}-${issueId}`;
 }
 
 function getVisibleElementId(issueId: string): string {

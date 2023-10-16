@@ -16,9 +16,9 @@ module.exports = {
                 ...webpackConfig,
                 entry: {
                     main: [env === 'development' && require.resolve('react-dev-utils/webpackHotDevClient'),paths.appIndexJs].filter(Boolean),
-                    content: './src/chrome-services/dom-evaluator.ts',
+                    githubDetails: './src/chrome-services/github-details.ts',
                     background: './src/chrome-services/background-processor.ts',
-                    issueVisible: './src/injection-scripts/issue-visible.ts'
+                    issueVisible: './src/chrome-services/issue-visible.ts'
                 },
                 output: {
                     ...webpackConfig.output,
