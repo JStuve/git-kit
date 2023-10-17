@@ -1,18 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.scss';
-import { LocalStorageToken } from './models';
+import { LoadState, MessageType } from './models';
+import { Issue } from './models/issue.model';
 
 function App() {
+  const [loadState, setLoadState] = React.useState<LoadState>(LoadState.Pending);
+  const [issues, setIssues] = React.useState<Issue[]>([]);
 
-  const [author, _] = React.useState(localStorage.getItem(LocalStorageToken.GitAuthor));
-  const [repo, _] = React.useState(localStorage.getItem(LocalStorageToken.GitRepo));
-  // const [headlines, setHeadlines] = React.useState<string[]>([]);
+  React.useEffect(() => {
 
+    const loadIssues = async () => {
+      setLoadState(LoadState.Loading);
+
+      const tabs = await chrome.tabs.query({ active: true, currentWindow: true});
+      const activeTab = tabs?.find(t => t.active);
+
+      if(!!activeTab) {
+        const issues: Issue[] = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.GetIssues, data: null})
+        setIssues(issues);
+      }
+
+      setLoadState(LoadState.Loaded);
+    }
+    
+    if(loadState === LoadState.Pending) {
+      loadIssues();
+    }
+    
+  }, [loadState])
   
   return (
     <div className="App">
-      <h1>{githubAuthor}/{githubRepo}</h1>
+      {issues?.map(i => (
+        <h3>{i.id}</h3>
+      ))}
     </div>
   );
 }

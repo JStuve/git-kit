@@ -1,13 +1,13 @@
-import { IndexDbIssueVisible, IndexDbType, LocalStorageToken, Message, MessageType } from '../models';
-import './issue-visible.scss';
-import { IndexDB } from "../services/index-db.service";
+import { LocalStorageToken, Message, MessageType } from '../models';
+import './issue-visible.content.scss';
+import { IssueVisible } from '../models/issue-visible.model';
+import { Issue } from '../models/issue.model';
 
-const issueIndexDb: IndexDB = new IndexDB(IndexDbType.IssueVisible);
-
-chrome.runtime.onMessage.addListener(async (message: Message<unknown>) => {
+chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
 	console.log('[Issue Visible]', message)
-	if(message.type === MessageType.IssueScriptLoad) {
-		await loadIssueUI();
+
+	if(message.type === MessageType.GetIssues) {
+		sendResponse(getIssues());
 	}
 });
 
@@ -16,11 +16,10 @@ async function loadIssueUI(): Promise<void> {
 	const githubRepo: string | null = await localStorage.getItem(LocalStorageToken.GitRepo);
 
 	if(githubAuthor === null || githubRepo === null) {
-		// TODO: Show some error message
+		console.error('[Issue Visible] Could not find author or repo')
 		return;
 	}
 
-	const existingIssuesHidden: IndexDbIssueVisible[] = await issueIndexDb.getAll(); // TODO: Update to only get records by author and repo 
 	const rawNodeElements = document.querySelectorAll('[id^="issue_"]');
 	const issueElements: HTMLDivElement[] = Array.from(rawNodeElements).filter(function(element) {
 		return element instanceof HTMLDivElement;
@@ -28,14 +27,15 @@ async function loadIssueUI(): Promise<void> {
 
 	for(const issueElement of issueElements) {
 		const issueId: string = issueElement.id.split('_')[1];
-		const isVisible: boolean = existingIssuesHidden?.find(i => i.id === getKey(githubAuthor, githubRepo, issueId))?.isVisible === false ? false : true;
-
+		const issueKey: string = getKey(githubAuthor, githubRepo, issueId)
 		const visibleContainerExists: boolean = !!issueElement.firstElementChild?.querySelector(`#${getVisibleElementId(issueId)}`);
 
 		if(visibleContainerExists === false) {
 			issueElement.firstElementChild?.appendChild(getVisibleElement(issueId));
-			issueElement.style.display = isVisible ? 'block' : 'none';
 		}
+
+		const issueVisible: {[key: string]: IssueVisible} = await chrome.storage.sync.get(issueKey);
+		issueElement.style.display = (issueVisible[issueKey]?.isVisible === false) ? 'none' : 'block';
 	}
 }
 
@@ -57,32 +57,40 @@ function getVisibleElement(issueId: string): HTMLDivElement {
 			const githubRepo: string | null = await localStorage.getItem(LocalStorageToken.GitRepo);
 
 			if(githubAuthor === null || githubRepo === null) {
-				// TODO: Show some error message
+				console.error('[Issue Visible] Could not find author or repo')
 				return;
 			}
 
 			issueElement.style.display = 'none';
 
-			const dbKey: string = getKey(githubAuthor, githubRepo, issueId)
-
-			chrome.runtime.sendMessage<Message<string>>({ 
-				type: MessageType.IssueHide, 
-				data: getKey(githubAuthor, githubRepo, issueId)
-			});
-
-			await issueIndexDb.update<IndexDbIssueVisible>(dbKey, { 
-				id: dbKey, 
+			const issueKey: string = getKey(githubAuthor, githubRepo, issueId)
+			const issueVisible: IssueVisible = { 
+				id: issueKey, 
 				isVisible: false,
 				gitHub: {
 					author: githubAuthor,
 					repo: githubRepo
 				},
 				hiddenDate: new Date()
-			});
+			}
+
+			chrome.storage.sync.set({[issueKey]: issueVisible});
 		}
 	})
 
 	return visibleDiv;
+}
+
+function getIssues(): Issue[] {
+	const rawNodeElements = document.querySelectorAll('[id^="issue_"]');
+	const issueElements: HTMLDivElement[] = Array.from(rawNodeElements).filter(function(element) {
+		return element instanceof HTMLDivElement;
+	}) as HTMLDivElement[];
+
+	return issueElements.map(i => ({
+		id: i.id.split('_')[1],
+		title: 'WIP'
+	}));
 }
 
 function getKey(gitHubAuthor: string, githubRepo: string, issueId: string): string {
@@ -92,5 +100,7 @@ function getKey(gitHubAuthor: string, githubRepo: string, issueId: string): stri
 function getVisibleElementId(issueId: string): string {
 	return `visible-container-${issueId}`;
 }
+
+loadIssueUI();
 
 export {};

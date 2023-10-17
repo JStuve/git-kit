@@ -13,6 +13,9 @@ export interface IndexDbDatabaseSchema extends DBSchema {
     }
 }
 
+/**
+ * @deprecated Moved to the issue visible event
+ */
 export interface IndexDbIssueVisible {
     id: string;
     isVisible: boolean;

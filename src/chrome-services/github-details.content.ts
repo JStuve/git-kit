@@ -1,9 +1,7 @@
 import { LocalStorageToken, Message, MessageType } from "../models";
 
 chrome.runtime.onMessage.addListener(async (message: Message<unknown>) => {
-	if(message.type === MessageType.SetGithubDetails) {
-		await setGithubRepo(document.location.pathname);
-	}
+	console.log('[Github Details]', message)
 });
 
 function setGithubRepo(url: string | undefined): void {
@@ -18,5 +16,7 @@ function setGithubRepo(url: string | undefined): void {
         localStorage.setItem(LocalStorageToken.GitRepo, splitUrl[2])
     }
 }
+
+setGithubRepo(document.location.pathname);
 
 export {};

@@ -15,17 +15,19 @@
   "permissions": [
     "activeTab",
     "contextMenus",
-    "scripting"
+    "scripting",
+    "storage",
+    "unlimitedStorage"
   ],
   "content_scripts": [
     {
         "matches": ["http://*/*", "https://*/*"],
         "js": [
-          "./static/js/githubDetails.js",
-          "./static/js/issueVisible.js"
+          "./static/js/githubDetailsContent.js",
+          "./static/js/issueVisibleContent.js"
         ],
         "css": [
-          "./issueVisible.css"
+          "./issueVisibleContent.css"
         ]
     }
   ],
