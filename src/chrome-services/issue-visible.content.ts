@@ -1,13 +1,19 @@
 import { LocalStorageToken, Message, MessageType } from '../models';
 import './issue-visible.content.scss';
-import { IssueVisible } from '../models/issue-visible.model';
-import { Issue } from '../models/issue.model';
+import { Issue, IssueExt } from '../models/issue.model';
 
 chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
 	console.log('[Issue Visible]', message)
 
-	if(message.type === MessageType.GetIssues) {
-		sendResponse(getIssues());
+	switch(message.type) {
+		case MessageType.IssueGet: {
+			sendResponse(await getIssues());
+			break;
+		}
+		case MessageType.IssueHide: {
+			break;
+		}
+		default: break;
 	}
 });
 
@@ -27,14 +33,14 @@ async function loadIssueUI(): Promise<void> {
 
 	for(const issueElement of issueElements) {
 		const issueId: string = issueElement.id.split('_')[1];
-		const issueKey: string = getKey(githubAuthor, githubRepo, issueId)
+		const issueKey: string = IssueExt.getKey(githubAuthor, githubRepo, issueId)
 		const visibleContainerExists: boolean = !!issueElement.firstElementChild?.querySelector(`#${getVisibleElementId(issueId)}`);
 
 		if(visibleContainerExists === false) {
 			issueElement.firstElementChild?.appendChild(getVisibleElement(issueId));
 		}
 
-		const issueVisible: {[key: string]: IssueVisible} = await chrome.storage.sync.get(issueKey);
+		const issueVisible: {[key: string]: Issue} = await chrome.storage.sync.get(issueKey);
 		issueElement.style.display = (issueVisible[issueKey]?.isVisible === false) ? 'none' : 'block';
 	}
 }
@@ -63,38 +69,49 @@ function getVisibleElement(issueId: string): HTMLDivElement {
 
 			issueElement.style.display = 'none';
 
-			const issueKey: string = getKey(githubAuthor, githubRepo, issueId)
-			const issueVisible: IssueVisible = { 
-				id: issueKey, 
+			const issueVisible: Issue = { 
+				id: IssueExt.getKey(githubAuthor, githubRepo, issueId), 
 				isVisible: false,
 				gitHub: {
 					author: githubAuthor,
-					repo: githubRepo
+					repo: githubRepo,
+					title: 'UNKNOWN',
+					issue: issueId
 				},
 				hiddenDate: new Date()
 			}
 
-			chrome.storage.sync.set({[issueKey]: issueVisible});
+			chrome.storage.sync.set({[issueVisible.id]: issueVisible});
 		}
 	})
 
 	return visibleDiv;
 }
 
-function getIssues(): Issue[] {
+async function getIssues(): Promise<Issue[]> {
 	const rawNodeElements = document.querySelectorAll('[id^="issue_"]');
 	const issueElements: HTMLDivElement[] = Array.from(rawNodeElements).filter(function(element) {
 		return element instanceof HTMLDivElement;
 	}) as HTMLDivElement[];
+	const githubAuthor: string = await localStorage.getItem(LocalStorageToken.GitAuthor) ?? '';
+	const githubRepo: string = await localStorage.getItem(LocalStorageToken.GitRepo) ?? '';
+	
 
-	return issueElements.map(i => ({
-		id: i.id.split('_')[1],
-		title: 'WIP'
-	}));
-}
-
-function getKey(gitHubAuthor: string, githubRepo: string, issueId: string): string {
-	return `${gitHubAuthor}-${githubRepo}-${issueId}`;
+	return issueElements.map(i => {
+		const issueId: string = i.id.split('_')[1];
+		const issueKey: string = IssueExt.getKey(githubAuthor, githubRepo, issueId);
+		return ({
+			id: issueKey,
+			title: 'WIP',
+			isVisible: i.style.display !== 'none',
+			gitHub: {
+				author: githubAuthor,
+				repo: githubRepo,
+				issue: issueId,
+				title: 'UNKNOWN'
+			}
+		})
+	});
 }
 
 function getVisibleElementId(issueId: string): string {

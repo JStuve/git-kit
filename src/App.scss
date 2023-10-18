@@ -1,40 +1,43 @@
-.App {
-  text-align: center;
-  width: 600px;
-  height: 400px;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+  flex-flow: column nowrap;
+  width: 400px;
+  min-height: 100px;
+  max-height: 400px;
+  overflow: hidden;
 
-.App-link {
-  color: #61dafb;
-}
+  .issues-container {
+    overflow: auto;
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+    .issue-container {
+      border-bottom: 1px solid var(--gray-6);
+      color: var(--gray-12);
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 0.25rem 0.5rem;
+  
+      .content-container {
+        align-items: flex-start;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+  
+        span {
+          color: var(--gray-11);
+        }
+      }
+    
+      .action-container {
+        color: var(--gray-11);
+        margin: auto 0;
+  
+        &:hover {
+          color: var(--blue-11);
+          cursor: pointer;
+        }
+      }
+    }  
   }
 }

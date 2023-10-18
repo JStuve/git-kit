@@ -1,4 +1,4 @@
-import { LocalStorageToken, Message, MessageType } from "../models";
+import { LocalStorageToken, Message } from "../models";
 
 chrome.runtime.onMessage.addListener(async (message: Message<unknown>) => {
 	console.log('[Github Details]', message)
