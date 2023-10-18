@@ -3,14 +3,13 @@ import './issue-visible.content.scss';
 import { Issue, IssueExt } from '../models/issue.model';
 
 chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
-	console.log('[Issue Visible]', message)
-
 	switch(message.type) {
 		case MessageType.IssueGet: {
 			sendResponse(await getIssues());
 			break;
 		}
-		case MessageType.IssueHide: {
+		case MessageType.IssueShow: {
+			sendResponse(await showIssue(message.data as Issue));
 			break;
 		}
 		default: break;
@@ -68,6 +67,7 @@ function getVisibleElement(issueId: string): HTMLDivElement {
 			}
 
 			issueElement.style.display = 'none';
+			const issueTitleElement = issueElement.querySelector(`[id^="issue_${issueId}_link"]`)
 
 			const issueVisible: Issue = { 
 				id: IssueExt.getKey(githubAuthor, githubRepo, issueId), 
@@ -75,7 +75,7 @@ function getVisibleElement(issueId: string): HTMLDivElement {
 				gitHub: {
 					author: githubAuthor,
 					repo: githubRepo,
-					title: 'UNKNOWN',
+					title: issueTitleElement?.textContent ?? 'UNKNOWN',
 					issue: issueId
 				},
 				hiddenDate: new Date()
@@ -102,16 +102,30 @@ async function getIssues(): Promise<Issue[]> {
 		const issueKey: string = IssueExt.getKey(githubAuthor, githubRepo, issueId);
 		return ({
 			id: issueKey,
-			title: 'WIP',
 			isVisible: i.style.display !== 'none',
 			gitHub: {
 				author: githubAuthor,
 				repo: githubRepo,
 				issue: issueId,
-				title: 'UNKNOWN'
-			}
+				title: 'N/A'
+			},
+			hiddenDate: new Date()
 		})
 	});
+}
+
+async function showIssue(issue: Issue): Promise<void> {
+	const rawIssueElement = document.getElementById(`issue_${issue.gitHub.issue}`);
+	
+	if(rawIssueElement === null) {
+		console.log('Unable to find issue element', issue)
+		chrome.storage.sync.remove(issue.id);
+		return;
+	}
+
+	rawIssueElement.style.display = 'block';
+	issue.isVisible = true;
+	await chrome.storage.sync.set({[issue.id]: issue});
 }
 
 function getVisibleElementId(issueId: string): string {

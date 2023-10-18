@@ -1,9 +1,11 @@
 export enum MessageType {
     SetGithubDetails = 'set-github-details',
+    GithubDetailsGet = '[Github Details] Get',
     Standard = '[Generic] Standard',
+    SetIcon = '[Generic] Set icon',
     IssueScriptLoad = '[Issue] Load script',
-    IssueHide = '[Issue] Hide',
-    IssueGet = '[Issue] Get'
+    IssueGet = '[Issue] Get',
+    IssueShow = '[Issue] Show',
 }
 
 export interface Message<T> {

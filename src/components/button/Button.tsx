@@ -5,7 +5,8 @@ export interface ButtonProps {
     className?: string[];
     child: string | JSX.Element;
     click?: () => void;
-    variant?: 'no-style'
+    variant?: 'no-style';
+    title?: string;
 }
 function Button(props: ButtonProps) {
     return (
@@ -13,7 +14,8 @@ function Button(props: ButtonProps) {
         {
             'button--no-style': props.variant === 'no-style'
         })} 
-            onClick={props.click}>
+            onClick={props.click}
+            title={props?.title}>
             {props.child}
         </button>
     )
