@@ -1,7 +1,9 @@
-import { Message } from "../models";
+import { Message, MessageType } from "../models";
 
-chrome.runtime.onMessage.addListener(async (message: Message<unknown>) => {
-	console.log('[Background Process]', message)
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+	if(changeInfo.status === 'complete') {
+		chrome.tabs.sendMessage<Message<null>>(tabId, { type: MessageType.IssueLoadUI, data: null })
+	}
 })
 
 export {};

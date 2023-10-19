@@ -7,6 +7,7 @@ div[id^="issue_"] {
             justify-self: center;
             margin: auto 0.25rem;
             color: var(--color-scale-gray-4);
+            z-index: 1; // Required for mobile viewport
 
             &:hover {
                 color: var(--color-scale-blue-4);

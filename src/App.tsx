@@ -6,8 +6,8 @@ import { Issue } from './models/issue.model';
 import Button from './components/button/Button';
 import clsx from 'clsx';
 import { ArrayUtility } from './utilities';
-import { Link, BrowserRouter as Router } from 'react-router-dom';
 import ReportIssueLink from './components/report-issue-link/ReportIssueLink';
+import Loader from './components/loader/Loader';
 
 function App() {
   const [loadState, setLoadState] = React.useState<LoadState>(LoadState.Pending);
@@ -105,7 +105,11 @@ function App() {
           <span className={clsx('title__feature')} title={'Issues'}>{'Issues'}</span>
           <span className={clsx('title__repo')} title={repo}>{repo !== null ? `in @${repo}` : ''}</span>
         </div>
-        <Button child={<RefreshCcw/>} click={() => setLoadState(LoadState.Pending)} title='Refresh issues'/>
+        <Button 
+          child={ loadState === LoadState.Loading ? <Loader/> : <RefreshCcw/>} 
+          click={() => setLoadState(LoadState.Pending)} 
+          title='Refresh issues'
+        />
       </div>
       
       <div className='issues-container'>

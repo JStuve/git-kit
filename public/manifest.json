@@ -1,6 +1,6 @@
 {
   "short_name": "GithubEx",
-  "name": "GithubEx - This is a Github browser extensions designed to provide a set of tools for OSS community.",
+  "name": "GitKit - Github browser extensions designed to provide a set of tools for OSS community.",
   "version": "0.1.0",
   "manifest_version": 3,
   "action": {
@@ -14,14 +14,12 @@
   },
   "permissions": [
     "activeTab",
-    "contextMenus",
-    "scripting",
     "storage",
     "unlimitedStorage"
   ],
   "content_scripts": [
     {
-        "matches": ["http://*/*", "https://*/*"],
+        "matches": ["http://github.com/*/*", "https://github.com/*/*"],
         "js": [
           "./static/js/githubDetailsContent.js",
           "./static/js/issueVisibleContent.js"

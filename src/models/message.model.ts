@@ -3,9 +3,9 @@ export enum MessageType {
     GithubDetailsGet = '[Github Details] Get',
     Standard = '[Generic] Standard',
     SetIcon = '[Generic] Set icon',
-    IssueScriptLoad = '[Issue] Load script',
     IssueGet = '[Issue] Get',
     IssueShow = '[Issue] Show',
+    IssueLoadUI = '[Issue] Load UI',
 }
 
 export interface Message<T> {

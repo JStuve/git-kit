@@ -12,6 +12,10 @@ chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, se
 			sendResponse(await showIssue(message.data as Issue));
 			break;
 		}
+		case MessageType.IssueLoadUI: {
+			await loadIssueUI();
+			break;
+		}
 		default: break;
 	}
 });
