@@ -1,7 +1,7 @@
 {
   "short_name": "GithubEx",
   "name": "GitKit - Github browser extensions designed to provide a set of tools for OSS community.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "manifest_version": 3,
   "action": {
     "default_popup": "index.html",
