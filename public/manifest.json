@@ -1,6 +1,6 @@
 {
   "short_name": "GithubEx",
-  "name": "GitKit - Github browser extensions designed to provide a set of tools for OSS community.",
+  "name": "GitKit - Github toolkit",
   "version": "1.0.0",
   "manifest_version": 3,
   "action": {
