@@ -2,6 +2,14 @@
   "name": "git-kit",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "craco start",
+    "build": "INLINE_RUNTIME_CHUNK=false craco build",
+    "package": "INLINE_RUNTIME_CHUNK=false craco build && ts-node --esm ./tools/package-extension.script.ts",
+    "test": "craco test",
+    "eject": "craco eject"
+  },
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@radix-ui/colors": "^3.0.0",
@@ -22,12 +30,6 @@
     "sass": "^1.69.3",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "craco start",
-    "build": "INLINE_RUNTIME_CHUNK=false craco build",
-    "test": "craco test",
-    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [

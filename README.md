@@ -1,46 +1,60 @@
-# Getting Started with Create React App
+<p align="center">
+  <img alt="posthoglogo" src="https://qcgihxzhaafyybmpwznh.supabase.co/storage/v1/object/public/git-kit/git-kit-banner.png">
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+## GitKit is a utility, open source extension for enhancing your Github experience
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Hide those long burning open issues in your favorite repository
+- More features in development...
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+## 📖 Table of Contents
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [Features](#features)
+- [Contributing](#contributing)
 
-### `npm run build`
+## 🚀 Features
+![ui-demo](https://qcgihxzhaafyybmpwznh.supabase.co/storage/v1/object/public/git-kit/github-toolkit-demo.gif)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Issues
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Hidden Issues**: De-clutter your favorite repository's issue board so you can focus on the issues that matter to you most.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## ⚡️ Contributing
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Lets build this together! Have a new idea? Found a bug? Head over to our [issue board](https://github.com/JStuve/git-kit/issues) and lets chat!
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Quick Start
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. Clone the repository
+```
+git clone https://github.com/JStuve/git-kit
+cd git-ki
+```
 
-## Learn More
+2. Make code changes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Build extension
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+npm run build
+```
+
+4. Install or refresh extension
+
+    a. Open chrome browser
+
+    b. Navigate to `chrome://extensions`
+    
+    c. Click "Load unpacked"
+
+    d. Select the `git-kit/build` folder
+
+5. Reload webpage
+
+_Live reload guide is available at this time_
