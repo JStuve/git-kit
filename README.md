@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="posthoglogo" src="https://qcgihxzhaafyybmpwznh.supabase.co/storage/v1/object/public/git-kit/git-kit-banner.png">
+  <img alt="gitkitlogo" src="https://qcgihxzhaafyybmpwznh.supabase.co/storage/v1/object/public/git-kit/git-kit-banner.png">
 </p>
 
 
