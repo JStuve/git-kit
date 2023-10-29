@@ -34,18 +34,27 @@ Lets build this together! Have a new idea? Found a bug? Head over to our [issue 
 1. Clone the repository
 ```
 git clone https://github.com/JStuve/git-kit
-cd git-ki
+cd git-kit
 ```
 
-2. Make code changes
+2. Create, and checkout to, your own branch following these standards
+```
+  [nameIdentifier]/[smallDescription]
 
-3. Build extension
+  Example:
+
+  jstuve/fixed-issue-loading
+```
+
+3. Make code changes
+
+4. Build extension
 
 ```
 npm run build
 ```
 
-4. Install or refresh extension
+5. Install or refresh extension
 
     a. Open chrome browser
 
@@ -55,6 +64,24 @@ npm run build
 
     d. Select the `git-kit/build` folder
 
-5. Reload webpage
+6. Reload webpage
 
-_Live reload guide is available at this time_
+_Live reload guide is not available at this time_
+
+
+## 💻 Repository Overview
+
+`src/chrome-services`: Injected scripts that load onto a users webpage. For each feature there should be a unique script. 
+
+NOTE: Future update will pull these scripts outside of the `src/` directory.
+
+`src/components`: UI elements for the extensions React application. These should be simple, 'dumb', components. (e.g. Buttons, Tabs, Dropdown, ect.)
+
+`src/models`: All of our interfaces, types, const, enums, will live in this folder.
+
+`src/utilities`: Small static classes used to improved common Typescript logic blocks.
+
+`src/**`: Root of the application contains all the React pages and boiler plate code.
+
+NOTE: Future update will isolate the pages into it's own directory.
+
