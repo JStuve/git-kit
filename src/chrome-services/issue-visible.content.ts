@@ -2,23 +2,25 @@ import { LocalStorageToken, Message, MessageType } from '../models';
 import './issue-visible.content.scss';
 import { Issue, IssueExt } from '../models/issue.model';
 
-chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
-	switch(message.type) {
-		case MessageType.IssueGet: {
-			sendResponse(await getIssues());
-			break;
+if(chrome.runtime?.onMessage) {
+	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
+		switch(message.type) {
+			case MessageType.IssueGet: {
+				sendResponse(await getIssues());
+				break;
+			}
+			case MessageType.IssueShow: {
+				sendResponse(await showIssue(message.data as Issue));
+				break;
+			}
+			case MessageType.IssueLoadUI: {
+				await loadIssueUI();
+				break;
+			}
+			default: break;
 		}
-		case MessageType.IssueShow: {
-			sendResponse(await showIssue(message.data as Issue));
-			break;
-		}
-		case MessageType.IssueLoadUI: {
-			await loadIssueUI();
-			break;
-		}
-		default: break;
-	}
-});
+	});
+}
 
 async function loadIssueUI(): Promise<void> {
 	const githubAuthor: string | null = await localStorage.getItem(LocalStorageToken.GitAuthor);
