@@ -6,6 +6,7 @@ export enum MessageType {
     IssueGet = '[Issue] Get',
     IssueShow = '[Issue] Show',
     IssueLoadUI = '[Issue] Load UI',
+    IssueVisitedCheck = '[Issue Visited] Check issue url'
 }
 
 export interface Message<T> {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Eye, RefreshCcw } from 'lucide-react';
 import './App.scss';
 import { GithubDetails, GithubTab, LoadState, MessageType } from './models';
-import { Issue } from './models/issue.model';
+import { Issue } from './models/issue-visible.model';
 import Button from './components/button/Button';
 import clsx from 'clsx';
 import { ArrayUtility } from './utilities';

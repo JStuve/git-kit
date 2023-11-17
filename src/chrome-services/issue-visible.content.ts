@@ -1,6 +1,6 @@
 import { LocalStorageToken, Message, MessageType } from '../models';
 import './issue-visible.content.scss';
-import { Issue, IssueExt } from '../models/issue.model';
+import { Issue, IssueExt } from '../models/issue-visible.model';
 
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
