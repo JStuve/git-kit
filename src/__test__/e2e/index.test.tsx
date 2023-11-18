@@ -4,8 +4,9 @@ require('dotenv').config();
 describe('index.html', () => {
   const EXTENSION_PATH = process.env.E2E_EXTENSION_PATH;
   const EXTENSION_ID = process.env.E2E_EXTENSION_ID;
-let browser: Browser | undefined;
-let githubUrl = 'https://github.com/JStuve/git-kit/issues';
+  
+  let browser: Browser | undefined;
+  let githubUrl = 'https://github.com/JStuve/git-kit/issues';
 
 beforeEach(async () => {
   browser = await puppeteer.launch({
