@@ -23,6 +23,22 @@
         "tsconfig": "tsconfig.json"
       }
     }
+    "eject": "craco eject",
+    "test-e2e": "jest ./src/__test__/e2e",
+    "test-unit": "craco test ./src/__test__/unit --watchAll=false",
+    "test": "npm run test-unit && npm run test-e2e"
+  },
+  "jest": {
+    "preset": "jest-puppeteer",
+    "testEnvironment": "jest-environment-puppeteer",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.json"
+      }
+    }
   },
   "dependencies": {
     "@craco/craco": "^7.1.0",
