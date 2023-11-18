@@ -20,7 +20,12 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
+  "types": [
+    "jest",
+    "puppeteer",
+    "jest-environment-puppeteer"
+  ],
   "include": [
-    "src"
+    "./src/**/*"
   ]
 }
