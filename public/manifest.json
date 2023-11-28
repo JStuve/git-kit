@@ -27,7 +27,8 @@
           "./static/js/issueVisitedContent.js"
         ],
         "css": [
-          "./issueVisibleContent.css"
+          "./issueVisibleContent.css",
+          "./issueVisitedContent.css"
         ]
     }
   ],
