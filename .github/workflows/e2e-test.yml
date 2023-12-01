@@ -30,7 +30,9 @@ jobs:
       - name: Install Dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm i
-        
+
+      - name: Setup Puppeteer Chrome
+        uses: tj-actions/puppeteer@v5.0.1
+
       - name: Run end to end tests
-        run: npm run test-e2e   
-      
+        run: npm run test-e2e
