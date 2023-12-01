@@ -1,6 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 require('dotenv').config();
-jest.setTimeout(30000);
 
 describe('index.html', () => {
   const EXTENSION_PATH = process.env.E2E_EXTENSION_PATH;
