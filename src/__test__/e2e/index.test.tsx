@@ -11,6 +11,7 @@ describe('index.html', () => {
 beforeEach(async () => {
   browser = await puppeteer.launch({
     headless: false,
+    devtools: false, 
     args: [
       `--load-extension=${EXTENSION_PATH}`,
       `--disable-extensions-except=${EXTENSION_PATH}`, 
