@@ -1,15 +1,17 @@
 import { GithubDetails, GithubTab, LocalStorageToken, Message, MessageType } from "../models";
 import { ArrayUtility } from "../utilities";
 
-chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
-	switch(message.type) {
-		case MessageType.GithubDetailsGet: {
-			sendResponse(getGithubDetails());
-			break;
-		}
-		default: break;
-	}
-});
+if(chrome?.runtime?.onMessage) {
+    chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
+        switch(message.type) {
+            case MessageType.GithubDetailsGet: {
+                sendResponse(getGithubDetails());
+                break;
+            }
+            default: break;
+        }
+    });
+}
 
 function getGithubDetails(): GithubDetails {
 

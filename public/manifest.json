@@ -13,6 +13,7 @@
     "128": "logo192.png"
   },
   "permissions": [
+    "tabs",
     "activeTab",
     "storage",
     "unlimitedStorage"
@@ -22,10 +23,12 @@
         "matches": ["http://github.com/*/*", "https://github.com/*/*"],
         "js": [
           "./static/js/githubDetailsContent.js",
-          "./static/js/issueVisibleContent.js"
+          "./static/js/issueVisibleContent.js",
+          "./static/js/issueVisitedContent.js"
         ],
         "css": [
-          "./issueVisibleContent.css"
+          "./issueVisibleContent.css",
+          "./issueVisitedContent.css"
         ]
     }
   ],
