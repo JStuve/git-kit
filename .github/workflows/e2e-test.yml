@@ -27,11 +27,20 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
+
       - name: Install Dependencies
-        run: npm i
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: |
+          npm i
+          npm run build --if-present
+        env:
+          CI: true
 
       - name: Setup Puppeteer Chrome
         uses: MauFournier/puppeteer-headful-with-commands@v3.0.0
 
       - name: Run end to end tests
-        run: npm run test-e2e
+        run: |
+          xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24' npm run test-e2e
+        env:
+          CI: true
