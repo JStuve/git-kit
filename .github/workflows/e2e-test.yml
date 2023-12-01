@@ -28,7 +28,6 @@ jobs:
           restore-keys: npm-
 
       - name: Install Dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm i
 
       - name: Setup Puppeteer Chrome
