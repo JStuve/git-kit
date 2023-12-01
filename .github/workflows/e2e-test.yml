@@ -1,21 +1,36 @@
-name: End-to-End Tests
-
-on: [push, pull_request]
+name: End To End Tests
+on:
+  pull_request: 
+    branches: 
+      - main
+    types: 
+      - opened
+      - synchronize
+  workflow_dispatch:
 
 jobs:
-  build:
+  run-e2e-tests:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+    
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version: '18.x'
+          
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        id: npm-cache
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
-
-    - name: Install Dependencies
-      run: npm ci
-
-    - name: Run Tests
-      run: npm run test:e2e
+      - name: Install Dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm i
+        
+      - name: Run unit tests
+        run: npm run test-e2e   
+      
