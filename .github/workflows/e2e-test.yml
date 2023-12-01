@@ -32,7 +32,7 @@ jobs:
         run: npm i
 
       - name: Setup Puppeteer Chrome
-        uses: tj-actions/puppeteer@v5.0.1
+        uses: MauFournier/puppeteer-headful-with-commands@v3.0.0
 
       - name: Setup Xvfb
         run: sudo apt-get install -y xvfb
