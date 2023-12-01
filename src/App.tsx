@@ -2,7 +2,7 @@ import React from 'react';
 import { Eye, RefreshCcw } from 'lucide-react';
 import './App.scss';
 import { GithubDetails, GithubTab, LoadState, MessageType } from './models';
-import { Issue } from './models/issue.model';
+import { Issue } from './models/issue-visible.model';
 import Button from './components/button/Button';
 import clsx from 'clsx';
 import { ArrayUtility } from './utilities';
@@ -11,7 +11,6 @@ import Loader from './components/loader/Loader';
 
 function App() {
   const [loadState, setLoadState] = React.useState<LoadState>(LoadState.Pending);
-  const [domIssues, setDomIssues] = React.useState<Issue[]>([]);
   const [hiddenIssues, setHiddenIssues] = React.useState<Issue[]>([]);
   const [activeTabId, setActiveTabId] = React.useState<number>(0);
   const [repo, setRepo] = React.useState<string>('');
@@ -22,7 +21,7 @@ function App() {
     const loadIssues = async () => {
       setLoadState(LoadState.Loading);
 
-      const tabs = await chrome.tabs.query({ active: true, currentWindow: true});
+      const tabs = chrome?.tabs ? await chrome.tabs.query({ active: true, currentWindow: true}) : null;
       const activeTab = tabs?.find(t => t.active);
 
       if(!!activeTab) {
@@ -32,7 +31,6 @@ function App() {
 
         setActiveTabId(activeTab.id ?? 0);
         setHiddenIssues(hiddenIssues);
-        setDomIssues(domIssues);
         
         const githubDetails: GithubDetails = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.GithubDetailsGet, data: null})
 
