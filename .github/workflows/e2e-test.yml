@@ -31,6 +31,6 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm i
         
-      - name: Run unit tests
+      - name: Run end to end tests
         run: npm run test-e2e   
       
