@@ -1,6 +1,13 @@
-import { LocalStorageToken, Message, MessageType } from '../models';
-import './issue-visible.content.scss';
-import { Issue, IssueExt } from '../models/issue-visible.model';
+import { LocalStorageToken, type Message, MessageType } from '../models';
+import './issue-visible.scss';
+import { type Issue, IssueExt } from '../models/issue-visible.model';
+import type { PlasmoCSConfig } from 'plasmo';
+
+export const config: PlasmoCSConfig = {
+    matches: ["https://github.com/**/**/issues"]
+}
+
+console.log("GitKit - Issue visible loaded")
 
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
@@ -139,5 +146,3 @@ function getVisibleElementId(issueId: string): string {
 }
 
 loadIssueUI();
-
-export {};
