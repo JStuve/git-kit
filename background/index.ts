@@ -1,4 +1,4 @@
-import { Message, MessageType } from "../models";
+import { type Message, MessageType } from "../models";
 
 if(chrome?.tabs?.onUpdated) {
 	chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
@@ -10,6 +10,3 @@ if(chrome?.tabs?.onUpdated) {
 		}
 	})
 }
-
-
-export {};

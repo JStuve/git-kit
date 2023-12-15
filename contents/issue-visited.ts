@@ -1,6 +1,12 @@
-import { IssueVisited, IssueVisitedExt, LocalStorageToken, Message, MessageType } from '../models';
+import type { PlasmoCSConfig } from 'plasmo';
+import { type IssueVisited, IssueVisitedExt, LocalStorageToken, type Message, MessageType } from '../models';
 import { NumberUtility } from '../utilities';
-import './issue-visited.content.scss';
+
+export const config: PlasmoCSConfig = {
+    matches: ["https://github.com/**/**/issues", "https://github.com/**/**/issues/**"]
+}
+
+console.log("GitKit - Issue visited loaded")
 
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
@@ -37,11 +43,7 @@ async function loadIssueUI(): Promise<void> {
 		const issueKey: string = IssueVisitedExt.getKey(githubAuthor, githubRepo, issueId)
 		const issueVisible: {[key: string]: IssueVisited} = await chrome.storage.sync.get(issueKey);
 		
-		if(issueVisible[issueKey]?.isVisited) {
-			issueElement.classList.add('gitkit-issue--visited');
-		} else {
-			issueElement.classList.add('gitkit-issue--not-visited');
-		}
+		issueElement.style.backgroundColor = issueVisible[issueKey]?.isVisited ? 'unset': 'var(--color-scale-gray-0)';
 	}
 }
 
@@ -87,5 +89,3 @@ async function setIssueVisited(url: string | undefined): Promise<void> {
 }
 
 loadIssueUI();
-
-export {};

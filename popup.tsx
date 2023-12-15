@@ -1,15 +1,16 @@
 import React from 'react';
 import { Eye, RefreshCcw } from 'lucide-react';
-import './App.scss';
-import { GithubDetails, GithubTab, LoadState, MessageType } from './models';
-import { Issue } from './models/issue-visible.model';
+import './popup.scss';
+import { type GithubDetails, GithubTab, LoadState, MessageType } from './models';
+import { type Issue } from './models/issue-visible.model';
 import Button from './components/button/Button';
 import clsx from 'clsx';
 import { ArrayUtility } from './utilities';
 import ReportIssueLink from './components/report-issue-link/ReportIssueLink';
 import Loader from './components/loader/Loader';
+import { StringUtility } from '~utilities/string.utility';
 
-function App() {
+function IndexPopup() {
   const [loadState, setLoadState] = React.useState<LoadState>(LoadState.Pending);
   const [hiddenIssues, setHiddenIssues] = React.useState<Issue[]>([]);
   const [activeTabId, setActiveTabId] = React.useState<number>(0);
@@ -25,22 +26,28 @@ function App() {
       const activeTab = tabs?.find(t => t.active);
 
       if(!!activeTab) {
-        const domIssues: Issue[] = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.IssueGet, data: null})
-        const storedIssues: {[key: string]: Issue } = await chrome.storage.sync.get(domIssues.map(d => d.id));
-        const hiddenIssues: Issue[] = ArrayUtility.sortBy<Issue, string>(Object.values(storedIssues).filter(i => i.isVisible === false), i => i.gitHub.issue, true);
+        try {
+          const domIssues: Issue[] = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.IssueGet, data: null})
+          const storedIssues: {[key: string]: Issue } = await chrome.storage.sync.get(domIssues.map(d => d.id));
+          const hiddenIssues: Issue[] = ArrayUtility.sortBy<Issue, string>(Object.values(storedIssues).filter(i => i.isVisible === false), i => i.gitHub.issue, true);
+  
+          setActiveTabId(activeTab.id ?? 0);
+          setHiddenIssues(hiddenIssues);
 
-        setActiveTabId(activeTab.id ?? 0);
-        setHiddenIssues(hiddenIssues);
-        
-        const githubDetails: GithubDetails = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.GithubDetailsGet, data: null})
+          console.log("In here")
+          
+          const githubDetails: GithubDetails = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.GithubDetailsGet, data: null})
+          
+          setGithubDetails(githubDetails);
 
-        setGithubDetails(githubDetails);
-        if(githubDetails.author === '') {
-          setRepo('')
-        } else {
-          setRepo(`${githubDetails.author}/${githubDetails.repo}`);
-        }
-        
+          if(StringUtility.hasValue(githubDetails?.author)) {
+            setRepo(`${githubDetails.author}/${githubDetails.repo}`);
+          } else {
+            setRepo('')
+          }
+        } catch(err) {
+          console.error("Failed to send message", err)
+        }        
       }
 
       setLoadState(LoadState.Loaded);
@@ -120,4 +127,4 @@ function App() {
   );
 }
 
-export default App;
+export default IndexPopup;

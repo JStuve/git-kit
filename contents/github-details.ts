@@ -1,5 +1,12 @@
-import { GithubDetails, GithubTab, LocalStorageToken, Message, MessageType } from "../models";
+import type { PlasmoCSConfig } from "plasmo";
+import { type GithubDetails, GithubTab, LocalStorageToken, type Message, MessageType } from "../models";
 import { ArrayUtility } from "../utilities";
+
+export const config: PlasmoCSConfig = {
+    matches: ["https://github.com/*/*"]
+}
+
+console.log("GitKit - Github details loaded")
 
 if(chrome?.runtime?.onMessage) {
     chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
@@ -34,5 +41,3 @@ function getGithubDetails(): GithubDetails {
 }
 
 getGithubDetails();
-
-export {};
