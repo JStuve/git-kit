@@ -7,4 +7,5 @@ export interface GithubDetails {
     tab: GithubTab;
     author: string;
     repo: string;
+    colorTheme: 'light' | 'dark';
 }

@@ -33,8 +33,6 @@ function IndexPopup() {
   
           setActiveTabId(activeTab.id ?? 0);
           setHiddenIssues(hiddenIssues);
-
-          console.log("In here")
           
           const githubDetails: GithubDetails = await chrome.tabs.sendMessage(activeTab.id ?? 0, { type: MessageType.GithubDetailsGet, data: null})
           
