@@ -1,12 +1,11 @@
 import type { PlasmoCSConfig } from "plasmo";
 import { type GithubDetails, GithubTab, LocalStorageToken, type Message, MessageType } from "../models";
 import { ArrayUtility } from "../utilities";
+import { CookieUtility } from "~utilities/cookie.utility";
 
 export const config: PlasmoCSConfig = {
     matches: ["https://github.com/*/*"]
 }
-
-console.log("GitKit - Github details loaded")
 
 if(chrome?.runtime?.onMessage) {
     chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
@@ -32,11 +31,38 @@ function getGithubDetails(): GithubDetails {
     localStorage.setItem(LocalStorageToken.GitRepo, repo)
     localStorage.setItem(LocalStorageToken.GitTab, tab)
 
+    const githubColorModeCookie: string = CookieUtility.getCookie('color_mode');
+    const githubColorMode: { "color_mode": string } = JSON.parse(decodeURIComponent(githubColorModeCookie) ?? '{}');
+
+    let colorTheme: 'light' | 'dark' = 'light';
+
+    switch(githubColorMode.color_mode) {
+        case 'auto': {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                colorTheme = 'dark';
+            } else {
+                colorTheme = 'light';
+            }
+            break
+        }
+        case 'dark': {
+            colorTheme = 'dark';
+            break;
+        }
+        default: {
+            colorTheme = 'light';
+            break;
+        }
+    }
+
+    localStorage.setItem(LocalStorageToken.GitColorMode, colorTheme)
+
     return {
         isGithubSite: document.location.hostname.includes('github'),
         author: author, 
         repo: repo,
         tab: tab,
+        colorTheme: colorTheme
     }
 }
 

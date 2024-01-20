@@ -10,11 +10,9 @@
     "test": "plasmo test"
   },
   "dependencies": {
-    "@plasmohq/messaging": "^0.6.1",
     "@radix-ui/colors": "^3.0.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.297.0",
-    "plasmo": "0.84.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "^6.21.0"
@@ -25,6 +23,7 @@
     "@types/node": "20.9.0",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
+    "plasmo": "0.84.0",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
   },

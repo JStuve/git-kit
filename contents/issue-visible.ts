@@ -7,8 +7,6 @@ export const config: PlasmoCSConfig = {
     matches: ["https://github.com/**/**/issues"]
 }
 
-console.log("GitKit - Issue visible loaded")
-
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
 		switch(message.type) {
@@ -131,7 +129,6 @@ async function showIssue(issue: Issue): Promise<void> {
 	const rawIssueElement = document.getElementById(`issue_${issue.gitHub.issue}`);
 	
 	if(rawIssueElement === null) {
-		console.log('Unable to find issue element', issue)
 		chrome.storage.sync.remove(issue.id);
 		return;
 	}

@@ -6,8 +6,6 @@ export const config: PlasmoCSConfig = {
     matches: ["https://github.com/**/**/issues", "https://github.com/**/**/issues/**"]
 }
 
-console.log("GitKit - Issue visited loaded")
-
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
 		switch(message.type) {
@@ -27,6 +25,7 @@ if(chrome.runtime?.onMessage) {
 async function loadIssueUI(): Promise<void> {
 	const githubAuthor: string | null = await localStorage.getItem(LocalStorageToken.GitAuthor);
 	const githubRepo: string | null = await localStorage.getItem(LocalStorageToken.GitRepo);
+	const githubColorMode: string | null = await localStorage.getItem(LocalStorageToken.GitColorMode);
 
 	if(githubAuthor === null || githubRepo === null) {
 		console.error('[Issue Visited] Could not find author or repo')
@@ -43,7 +42,9 @@ async function loadIssueUI(): Promise<void> {
 		const issueKey: string = IssueVisitedExt.getKey(githubAuthor, githubRepo, issueId)
 		const issueVisible: {[key: string]: IssueVisited} = await chrome.storage.sync.get(issueKey);
 		
-		issueElement.style.backgroundColor = issueVisible[issueKey]?.isVisited ? 'unset': 'var(--color-scale-gray-0)';
+		if(!issueVisible[issueKey]?.isVisited) {
+			issueElement.style.backgroundColor = githubColorMode === 'light' ? 'var(--color-scale-gray-0)' : 'var(--color-scale-gray-8)';
+		}
 	}
 }
 
