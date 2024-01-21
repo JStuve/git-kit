@@ -22,6 +22,7 @@
 ### Issues
 
 - **Hidden Issues**: De-clutter your favorite repository's issue board so you can focus on the issues that matter to you most.
+- **Issues Visited**: Visual see which issues have been looked at across all pages. No more opening up issues for the 100th time!
 
 
 ## ⚡️ Contributing
@@ -45,6 +46,9 @@ cd git-kit
 
   jstuve/fixed-issue-loading
 ```
+
+Install packages: `yarn`
+
 
 3. Make code changes
 
