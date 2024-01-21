@@ -4,7 +4,10 @@ import { type Issue, IssueExt } from '../models/issue-visible.model';
 import type { PlasmoCSConfig } from 'plasmo';
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://github.com/**/**/issues"]
+    matches: [
+		"https://github.com/**/**/issues",
+		"https://github.com/**/**/issues?*"
+	]
 }
 
 if(chrome.runtime?.onMessage) {

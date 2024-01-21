@@ -3,7 +3,11 @@ import { type IssueVisited, IssueVisitedExt, LocalStorageToken, type Message, Me
 import { NumberUtility } from '../utilities';
 
 export const config: PlasmoCSConfig = {
-    matches: ["https://github.com/**/**/issues", "https://github.com/**/**/issues/**"]
+    matches: [
+		"https://github.com/**/**/issues",
+		"https://github.com/**/**/issues?*",
+		"https://github.com/**/**/issues/**"
+	]
 }
 
 if(chrome.runtime?.onMessage) {
