@@ -1,17 +1,18 @@
 import type { PlasmoCSConfig } from 'plasmo';
-import { type IssueVisited, IssueVisitedExt, LocalStorageToken, type Message, MessageType } from '../models';
+import { type IssueVisited, IssueVisitedExt, LocalStorageToken, type Message, MessageType, GithubTab } from '../models';
 import { NumberUtility } from '../utilities';
 
 export const config: PlasmoCSConfig = {
-    matches: [
-		"https://github.com/**/**/issues",
-		"https://github.com/**/**/issues?*",
-		"https://github.com/**/**/issues/**"
-	]
+    matches: ["https://github.com/*/*"]
 }
 
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
+		const tab = localStorage.getItem(LocalStorageToken.GitTab);
+		if(tab !== GithubTab.Issues) {
+			return
+		}
+
 		switch(message.type) {
 			case MessageType.IssueLoadUI: {
 				await loadIssueUI();
@@ -92,5 +93,3 @@ async function setIssueVisited(url: string | undefined): Promise<void> {
 
 	chrome.storage.sync.set({[issueVisited.id]: issueVisited});
 }
-
-loadIssueUI();

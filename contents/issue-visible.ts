@@ -1,17 +1,21 @@
-import { LocalStorageToken, type Message, MessageType } from '../models';
+import { LocalStorageToken, type Message, MessageType, GithubTab } from '../models';
 import './issue-visible.scss';
 import { type Issue, IssueExt } from '../models/issue-visible.model';
 import type { PlasmoCSConfig } from 'plasmo';
 
 export const config: PlasmoCSConfig = {
-    matches: [
-		"https://github.com/**/**/issues",
-		"https://github.com/**/**/issues?*"
-	]
+    matches: ["https://github.com/*/*"]
 }
+
+let retryCount: number = 0;
 
 if(chrome.runtime?.onMessage) {
 	chrome.runtime.onMessage.addListener(async (message: Message<unknown>, never, sendResponse) => {
+		const tab = localStorage.getItem(LocalStorageToken.GitTab);
+		if(tab !== GithubTab.Issues) {
+			return
+		}
+
 		switch(message.type) {
 			case MessageType.IssueGet: {
 				sendResponse(await getIssues());
@@ -49,9 +53,11 @@ async function loadIssueUI(): Promise<void> {
 		const issueKey: string = IssueExt.getKey(githubAuthor, githubRepo, issueId)
 		const visibleContainerExists: boolean = !!issueElement.firstElementChild?.querySelector(`#${getVisibleElementId(issueId)}`);
 
-		if(visibleContainerExists === false) {
-			issueElement.firstElementChild?.appendChild(getVisibleElement(issueId));
+		if(visibleContainerExists) {
+			issueElement.firstElementChild?.removeChild(issueElement.firstElementChild?.querySelector(`#${getVisibleElementId(issueId)}`));
 		}
+
+		issueElement.firstElementChild?.appendChild(getVisibleElement(issueId));
 
 		const issueVisible: {[key: string]: Issue} = await chrome.storage.sync.get(issueKey);
 		issueElement.style.display = (issueVisible[issueKey]?.isVisible === false) ? 'none' : 'block';
@@ -144,5 +150,3 @@ async function showIssue(issue: Issue): Promise<void> {
 function getVisibleElementId(issueId: string): string {
 	return `visible-container-${issueId}`;
 }
-
-loadIssueUI();
